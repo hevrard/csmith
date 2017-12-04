@@ -133,6 +133,8 @@ transparent_crc_bytes (char *ptr, int nbytes, char* vname, int flag)
 
 #endif
 
+#include "unsafe_math_macros.h"
+
 #endif /* RANDOM_RUNTIME_H */
 
 /*
