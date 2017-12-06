@@ -4,7 +4,8 @@ import sys
 import os
 
 UB_ERRFILE = 'ub_error.txt'
-DYN_SAFE_FILE = 'dyn_safe.c'
+STATIC_SAFE_FILE = 'static_safe.c'
+DYN_SAFE_FILE = 'dynamic_safe.c'
 TIMEOUT = '30'
 
 def makeAllUnsafe(program):
@@ -123,18 +124,24 @@ def applyUnsafeMath(program):
         i += 1
 
 def outputFromCompiledWith(compiler):
-    return compiler.replace(' -', '_') + '_out'
-        
-def compileAndRun(program, compiler):
-    cmd = compiler + ' -I$CSMITH_HOME/runtime ' + program + ' -o a.out'
-    runCmd(cmd)
+    return compiler.replace(' ', '') + '_out'
 
-    cmd = './a.out > ' + outputFromCompiledWith(compiler)
-    ret = os.system(cmd)
+def compileAndRun(compiler):
+    os.environ['GCOV_PREFIX_STRIP'] = '4'
 
-    if ret != 0:
-        print('This command returned {}: {} '.format(ret, cmd))
-        exit(1)
+    for program in [STATIC_SAFE_FILE, DYN_SAFE_FILE]:
+        token = compiler.replace(' ', '') + '-' + program[:-2]
+        os.environ['GCOV_PREFIX'] = '/home/gpu/work/csmith/unsafe-math/coverage/' + token
+
+        cmd = compiler + ' -I$CSMITH_HOME/runtime ' + program + ' -o a.out'
+        runCmd(cmd)
+
+        cmd = './a.out > ' + outputFromCompiledWith(compiler)
+        ret = os.system(cmd)
+
+        if ret != 0:
+            print('This command returned {}: {} '.format(ret, cmd))
+            exit(1)
 
     os.remove('a.out')
         
@@ -144,28 +151,31 @@ seed = sys.argv[1]
 
 #print('Seed: {}'.format(seed))
 
-ret = os.system('csmith --seed {} > test.c'.format(seed))
+ret = os.system('csmith --seed {} > {}'.format(seed, STATIC_SAFE_FILE))
 if ret != 0:
     print('csmith returns: {}'.format(ret))
     exit(1)
 
-applyUnsafeMath('test.c')
+applyUnsafeMath(STATIC_SAFE_FILE)
 
 COMPILERS = [
-    'clang -O0',
-    'clang -O1',
-    'clang -O2',
-    'clang -O3',
-    'clang -Os',
-    'gcc -O0',
-    'gcc -O1',
-    'gcc -O2',
-    'gcc -O3',
-    'gcc -Os'
+    'clang-5.0',
+    'gcc-7.2'
+
+    # 'clang-5.0 -O0',
+    # 'clang-5.0 -O1',
+    # 'clang-5.0 -O2',
+    # 'clang-5.0 -O3',
+    # 'clang-5.0 -Os',
+    # 'gcc-7.2 -O0',
+    # 'gcc-7.2 -O1',
+    # 'gcc-7.2 -O2',
+    # 'gcc-7.2 -O3',
+    # 'gcc-7.2 -Os'
 ]
 
 for cc in COMPILERS:
-    compileAndRun(DYN_SAFE_FILE, cc)
+    compileAndRun(cc)
 
 ref = ''
 for i, cc in enumerate(COMPILERS):
