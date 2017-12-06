@@ -9,7 +9,7 @@ author: Hugues Evrard
 Call configure with `--enable-coverage`:
 
     ../gcc-7.2.0/configure -v \
-      --prefix=/home/gpu/work/local/gcc-7.2 \
+      --prefix=/usr/local/gcc-7.2 \
       --program-suffix=-7.2 \
       --build=x86_64-linux-gnu \
       --host=x86_64-linux-gnu \
