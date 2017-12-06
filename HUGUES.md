@@ -47,3 +47,23 @@ Add following to bashrc:
     LD_LIBRARY_PATH="$GCC_720_PATH/lib64:$LD_LIBRARY_PATH"
     export LD_LIBRARY_PATH
 
+
+# build LLVM with coverage
+
+We consider we build LLVM using gcc. Pass the "--coverage" flag as an
+extra C and C++ flag:
+
+    cmake -G "Ninja" \
+          -DCMAKE_BUILD_TYPE="Release" \
+          -DCMAKE_INSTALL_PREFIX="/usr/local/llvm-5.0" \
+          -DLLVM_TARGETS_TO_BUILD="X86" \
+          -DLLVM_BUILD_EXAMPLES="OFF" \
+          -DLLVM_BUILD_TESTS="OFF" \
+          -DLLVM_BUILD_DOCS="OFF" \
+          -DCMAKE_C_FLAGS="--coverage" \
+          -DCMAKE_CXX_FLAGS="--coverage" \
+          /home/gpu/work/llvm-5.0.0.src
+
+Then build, install, and edit bashrc / ldconf in a similar way as with
+GCC.
+
