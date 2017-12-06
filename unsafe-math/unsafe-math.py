@@ -53,7 +53,9 @@ def collectUB(program, errFile):
                 col = int(location[1])
                 if line not in errorLocation:
                     errorLocation[line] = []
-                errorLocation[line].append(col)
+                # avoid duplicates of columns
+                if col not in errorLocation[line]:
+                    errorLocation[line].append(col)
     return errorLocation
 
 def correctErrorLocation(errorLocation):
