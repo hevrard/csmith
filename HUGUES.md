@@ -19,3 +19,31 @@ Call configure with `--enable-coverage`:
       --disable-multilib \
       --enable-coverage
 
+
+Then (adapt the number of processes to the machine on which you
+built):
+
+    make -j 16     # this is for an 8 core CPU
+
+    # The built takes a while
+
+    sudo make install
+
+Then edit `/etc/ld.so.conf` to add:
+
+     /usr/local/gcc-7.2/lib64
+
+And reload:
+
+    sudo ldconfig
+
+Add following to bashrc:
+
+    GCC_720_PATH="/usr/local/gcc-7.2"
+
+    PATH="$GCC_720_PATH/bin:$PATH"
+    export PATH
+
+    LD_LIBRARY_PATH="$GCC_720_PATH/lib64:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH
+
