@@ -76,14 +76,13 @@ local directories. To actually get the `.gcov` files, use the
 
 # Some results:
 
-gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_*
-total:    1214300
-both:      109529 (9.019929%)
-exclu _clang_dynamic:     1669 (0.137445%)
-exclu _clang_static:      367 (0.030223%)
-gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_static _clang_dynamic
-total:    1214300
-both:      109529 (9.019929%)
-exclu _clang_static:      367 (0.030223%)
-exclu _clang_dynamic:     1669 (0.137445%)
-
+    gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_*
+    total:    1214300
+    both:      109529 (9.019929%)
+    exclu _clang_dynamic:     1669 (0.137445%)
+    exclu _clang_static:      367 (0.030223%)
+    gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_static _clang_dynamic
+    total:    1214300
+    both:      109529 (9.019929%)
+    exclu _clang_static:      367 (0.030223%)
+    exclu _clang_dynamic:     1669 (0.137445%)
