@@ -67,3 +67,23 @@ extra C and C++ flag:
 Then build, install, and edit bashrc / ldconf in a similar way as with
 GCC.
 
+# Getting coverage data
+
+The `unsafe-math.py` take care of setting the `GCOV_PREFIX`
+environment variables to generate the coverage data files `.gcda` in
+local directories. To actually get the `.gcov` files, use the
+`runGcov.sh` scripts under the build scripts.
+
+# Some results:
+
+gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_*
+total:    1214300
+both:      109529 (9.019929%)
+exclu _clang_dynamic:     1669 (0.137445%)
+exclu _clang_static:      367 (0.030223%)
+gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_static _clang_dynamic
+total:    1214300
+both:      109529 (9.019929%)
+exclu _clang_static:      367 (0.030223%)
+exclu _clang_dynamic:     1669 (0.137445%)
+
