@@ -76,6 +76,8 @@ local directories. To actually get the `.gcov` files, use the
 
 # Some results:
 
+## on 1000 experiments
+
     gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _gcc_static _gcc_dynamic
     total:     773291
     both:       95715 (12.377617%)           # covered by both static and dynamic
@@ -87,3 +89,23 @@ local directories. To actually get the `.gcov` files, use the
     both:      109529 (9.019929%)
     exclu _clang_static:      367 (0.030223%)
     exclu _clang_dynamic:     1669 (0.137445%)
+
+## on 10k experiments, 12 december 2017
+
+    gpu@anorien:~/work/csmith/unsafe-math$ awk -f checklog.awk 12_12_2017.txt
+    Nb Experiments: 10002
+    Timeouts:        3096    
+    Max nb round:   17
+    Avg nb round:    1.50
+
+    gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _gcc_static _gcc_dynamic
+    total:    1546582
+    both:      191430 (12.377617%)
+    exclu _gcc_static:      260 (0.016811%)
+    exclu _gcc_dynamic:     9350 (0.604559%)
+
+    gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_static _clang_dynamic
+    total:    2428600
+    both:      219058 (9.019929%)
+    exclu _clang_static:      734 (0.030223%)
+    exclu _clang_dynamic:     3338 (0.137445%)
