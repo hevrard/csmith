@@ -6,7 +6,7 @@ import os
 UB_ERRFILE = 'ub_error.txt'
 STATIC_SAFE_FILE = 'static_safe.c'
 DYN_SAFE_FILE = 'dynamic_safe.c'
-TIMEOUT = '30'
+TIMEOUT = '10'
 
 def makeAllUnsafe(program):
     source = ''
@@ -36,9 +36,11 @@ def collectUB(program, errFile):
 
     os.remove('a.out')
 
-    if ret != 0:
+    if ret == 124 or ret == 31744:
         print('timeout')
-        exit(124)
+        exit(1)
+    elif ret != 0:
+        print('UBsan execution lead to return value: {}'.format(ret))
 
     # dictionnary: line -> list of columns
     errorLocation = {}
