@@ -15,23 +15,20 @@ def makeAllUnsafe(program):
         source = source.replace('safe_', 'UNSAFE_')
     return source
 
-def runCmd(cmd):
-    cmd += ' > _out 2> _err'
-    ret = os.system(cmd)
-    if ret != 0:
-        print('CATCH command failed')
-        print('ERROR: the following command returned non-zero value: {}'.format(ret))
-        print(cmd)
-        exit(1)
-    os.system('rm -f _out _err')
-
 def collectUB(program, errFile):
 
     cmd = 'clang-3.8'
     cmd += ' ' + '-fsanitize=undefined'
     cmd += ' ' + '-I${CSMITH_HOME}/runtime'
     cmd += ' ' + program
-    runCmd(cmd)
+    cmd += ' > clang_ubsan_out 2> clang_ubsan_err'
+    ret = os.system(cmd)
+    if ret != 0:
+        print('CATCH compiling with UBSan failed')
+        print('ERROR: the following command returned non-zero value: {}'.format(ret))
+        print(cmd)
+        exit(1)
+    os.system('rm -f clang_ubsan_out clang_ubsan_err')
 
     cmd = 'timeout --kill-after=1 ' + TIMEOUT
     cmd += ' ./a.out > /dev/null 2> ' + errFile
@@ -165,16 +162,16 @@ def compileAndRun(compiler):
 
 ######################################################################
 
-# seed = sys.argv[1]
+seed = sys.argv[1]
 
-# #print('Seed: {}'.format(seed))
+#print('Seed: {}'.format(seed))
 
-# ret = os.system('csmith --seed {} > {}'.format(seed, STATIC_SAFE_FILE))
-# if ret != 0:
-#     print('csmith returns: {}'.format(ret))
-#     exit(1)
+ret = os.system('csmith --seed {} > {}'.format(seed, STATIC_SAFE_FILE))
+if ret != 0:
+    print('csmith returns: {}'.format(ret))
+    exit(1)
 
-# applyUnsafeMath(STATIC_SAFE_FILE)
+applyUnsafeMath(STATIC_SAFE_FILE)
 
 COMPILERS = [
     # 'clang-5.0',
