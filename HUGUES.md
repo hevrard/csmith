@@ -99,13 +99,76 @@ local directories. To actually get the `.gcov` files, use the
     Avg nb round:    1.50
 
     gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _gcc_static _gcc_dynamic
-    total:    1546582
-    both:      191430 (12.377617%)
-    exclu _gcc_static:      260 (0.016811%)
-    exclu _gcc_dynamic:     9350 (0.604559%)
-
+    total:     773291
+    both:       95715 (12.377617%)
+    exclu _gcc_static:      130 (0.016811%)
+    exclu _gcc_dynamic:     4675 (0.604559%)
+    
     gpu@anorien:~/work/csmith/unsafe-math/coverage$ ./compcov.py _clang_static _clang_dynamic
-    total:    2428600
-    both:      219058 (9.019929%)
-    exclu _clang_static:      734 (0.030223%)
-    exclu _clang_dynamic:     3338 (0.137445%)
+    total:    1214300
+    both:      109529 (9.019929%)
+    exclu _clang_static:      367 (0.030223%)
+    exclu _clang_dynamic:     1669 (0.137445%)
+
+## on 10k experiments, with different optimisation flags, december 18
+
+    ### gcc-7.2-O0
+    total:     773291
+    both:       95674 (12.372315%)
+    exclu _gcc-7.2-O0_sta:      123 (0.015906%)
+    exclu _gcc-7.2-O0_dyn:     4528 (0.585549%)
+
+    ### gcc-7.2-O1
+    total:     773291
+    both:      181996 (23.535254%)
+    exclu _gcc-7.2-O1_sta:     2368 (0.306224%)
+    exclu _gcc-7.2-O1_dyn:     4544 (0.587618%)
+
+    ### gcc-7.2-O2
+    total:     773291
+    both:      213817 (27.650264%)
+    exclu _gcc-7.2-O2_sta:     2016 (0.260704%)
+    exclu _gcc-7.2-O2_dyn:     3737 (0.483259%)
+
+    ### gcc-7.2-O3
+    total:     773291
+    both:      232117 (30.016772%)
+    exclu _gcc-7.2-O3_sta:     1973 (0.255143%)
+    exclu _gcc-7.2-O3_dyn:     3981 (0.514813%)
+
+    ### gcc-7.2-Os
+    total:     773291
+    both:      209563 (27.100147%)
+    exclu _gcc-7.2-Os_sta:     2145 (0.277386%)
+    exclu _gcc-7.2-Os_dyn:     3876 (0.501234%)
+
+    ### clang-5.0-O0
+    total:    1214300
+    both:      109781 (9.040682%)
+    exclu _clang-5.0-O0_sta:      209 (0.017212%)
+    exclu _clang-5.0-O0_dyn:     1878 (0.154657%)
+
+    ### clang-5.0-O1
+    total:    1214300
+    both:      203964 (16.796838%)
+    exclu _clang-5.0-O1_sta:     2023 (0.166598%)
+    exclu _clang-5.0-O1_dyn:     2968 (0.244421%)
+
+    ### clang-5.0-O2
+    total:    1214300
+    both:      219996 (18.117105%)
+    exclu _clang-5.0-O2_sta:     1297 (0.106811%)
+    exclu _clang-5.0-O2_dyn:     1720 (0.141645%)
+
+    ### clang-5.0-O3
+    total:    1214300
+    both:      221813 (18.266738%)
+    exclu _clang-5.0-O3_sta:     1578 (0.129951%)
+    exclu _clang-5.0-O3_dyn:     1677 (0.138104%)
+
+    ### clang-5.0-Os
+    total:    1214300
+    both:      214957 (17.702133%)
+    exclu _clang-5.0-Os_sta:     1297 (0.106811%)
+    exclu _clang-5.0-Os_dyn:     1768 (0.145598%)
+
