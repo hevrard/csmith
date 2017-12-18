@@ -19,6 +19,7 @@ def runCmd(cmd):
     cmd += ' > _out 2> _err'
     ret = os.system(cmd)
     if ret != 0:
+        print('CATCH command failed')
         print('ERROR: the following command returned non-zero value: {}'.format(ret))
         print(cmd)
         exit(1)
@@ -31,13 +32,13 @@ def collectUB(program, errFile):
     cmd += ' ' + '-I${CSMITH_HOME}/runtime'
     cmd += ' ' + program
     runCmd(cmd)
-        
+
     cmd = 'timeout --kill-after=1 ' + TIMEOUT
     cmd += ' ./a.out > /dev/null 2> ' + errFile
     ret = os.system(cmd)
 
     os.remove('a.out')
-    
+
     if ret != 0:
         print('timeout')
         exit(124)
@@ -131,53 +132,74 @@ def outputFromCompiledWith(compiler):
 def compileAndRun(compiler):
     os.environ['GCOV_PREFIX_STRIP'] = '4'
 
+    crashed = False
+
     for program in [STATIC_SAFE_FILE, DYN_SAFE_FILE]:
         token = compiler.replace(' ', '') + '-' + program[:-2]
-        os.environ['GCOV_PREFIX'] = '/home/gpu/work/csmith/unsafe-math/coverage/' + token
+        os.environ['GCOV_PREFIX'] = '/home/gpu/work/csmith/dynamic-safe/coverage/' + token
 
         cmd = compiler + ' -I$CSMITH_HOME/runtime ' + program + ' -o a.out'
-        runCmd(cmd)
+        cmd += ' > ' + token + '_out 2> ' + token + '_err'
+        ret = os.system(cmd)
+        if ret != 0:
+            print('CATCH compiler crashed')
+            print('This command returned {}: {} '.format(ret, cmd))
+            crashed = True
+        else:
+            os.system('rm ' + token + '_out ' + token + '_err')
 
         cmd = './a.out > ' + outputFromCompiledWith(compiler)
+        cmd += ' 2> ' + token + '_exec_err'
         ret = os.system(cmd)
 
         if ret != 0:
+            print('CATCH executable crashed')
             print('This command returned {}: {} '.format(ret, cmd))
-            exit(1)
+            crashed = True
+        else:
+            os.system('rm ' + token + '_exec_err')
 
-    os.remove('a.out')
-        
+        os.remove('a.out')
+
+    return crashed
+
 ######################################################################
 
-seed = sys.argv[1]
+# seed = sys.argv[1]
 
-#print('Seed: {}'.format(seed))
+# #print('Seed: {}'.format(seed))
 
-ret = os.system('csmith --seed {} > {}'.format(seed, STATIC_SAFE_FILE))
-if ret != 0:
-    print('csmith returns: {}'.format(ret))
-    exit(1)
+# ret = os.system('csmith --seed {} > {}'.format(seed, STATIC_SAFE_FILE))
+# if ret != 0:
+#     print('csmith returns: {}'.format(ret))
+#     exit(1)
 
-applyUnsafeMath(STATIC_SAFE_FILE)
+# applyUnsafeMath(STATIC_SAFE_FILE)
 
 COMPILERS = [
-    'clang-5.0',
-    'gcc-7.2'
+    # 'clang-5.0',
+    # 'gcc-7.2'
 
-    # 'clang-5.0 -O0',
-    # 'clang-5.0 -O1',
-    # 'clang-5.0 -O2',
-    # 'clang-5.0 -O3',
-    # 'clang-5.0 -Os',
-    # 'gcc-7.2 -O0',
-    # 'gcc-7.2 -O1',
-    # 'gcc-7.2 -O2',
-    # 'gcc-7.2 -O3',
-    # 'gcc-7.2 -Os'
+    'clang-5.0 -O0',
+    'clang-5.0 -O1',
+    'clang-5.0 -O2',
+    'clang-5.0 -O3',
+    'clang-5.0 -Os',
+    'gcc-7.2 -O0',
+    'gcc-7.2 -O1',
+    'gcc-7.2 -O2',
+    'gcc-7.2 -O3',
+    'gcc-7.2 -Os'
 ]
 
+crashed = False
 for cc in COMPILERS:
-    compileAndRun(cc)
+    tmpCrashed = compileAndRun(cc)
+    crashed = crashed or tmpCrashed
+
+if crashed:
+    print('WARNING: due to previous issue, exit now and do not compare outputs')
+    exit(1)
 
 ref = ''
 for i, cc in enumerate(COMPILERS):
@@ -187,5 +209,6 @@ for i, cc in enumerate(COMPILERS):
         else:
             content = f.read()
             if ref != content:
-                print('different output for different compilers')
+                print('CATCH different output for different compilers')
+                exit(1)
 print('all compilers lead to same output')
