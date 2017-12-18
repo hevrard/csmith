@@ -110,7 +110,7 @@ local directories. To actually get the `.gcov` files, use the
     exclu _clang_static:      367 (0.030223%)
     exclu _clang_dynamic:     1669 (0.137445%)
 
-## on 10k experiments, with different optimisation flags, 14 december
+## on approx. 2k experiments, with different optimisation flags, 14 december
 
     ### gcc-7.2-O0
     total:     773291
