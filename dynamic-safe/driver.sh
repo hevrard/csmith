@@ -1,9 +1,8 @@
 #!/bin/bash
 
-#for seed in `seq 4000 5999`
-for seed in `seq 4000 4008`
+for seed in `seq 4000 5999`
 do
-    echo "======== START $seed ========="
+    echo "======== START $seed DATE `date`"
     num=`printf "%4.4d" $seed`
     expdir="exp_$num"
     rm -rf $expdir

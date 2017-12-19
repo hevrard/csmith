@@ -6,7 +6,7 @@ import os
 UB_ERRFILE = 'ub_error.txt'
 STATIC_SAFE_FILE = 'static_safe.c'
 DYN_SAFE_FILE = 'dynamic_safe.c'
-TIMEOUT = '10'
+TIMEOUT = '30'
 
 def makeAllUnsafe(program):
     source = ''
@@ -47,7 +47,7 @@ def collectUB(program, errFile):
     with open(errFile) as f:
         for errLine in f:
             if errLine.startswith(program):
-                print('UB_ERR: ' + errLine)
+                print('UB_ERR: ' + errLine.rstrip())
                 location = errLine.split(':')[1:3]
                 line = int(location[0])
                 col = int(location[1])
