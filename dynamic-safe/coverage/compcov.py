@@ -39,6 +39,7 @@ for i, l1 in enumerate(lines1):
     # if skipfile and (t1 != 'file'):
     #     continue
 
+
     if t1 == 'file':
         fn1 = getFilename(l1)
         fn2 = getFilename(l2)

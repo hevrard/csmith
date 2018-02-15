@@ -135,7 +135,7 @@ def compileAndRun(compiler):
 
     for program in [STATIC_SAFE_FILE, DYN_SAFE_FILE]:
         token = compiler.replace(' ', '') + '-' + program[:-2]
-        os.environ['GCOV_PREFIX'] = '/home/gpu/work/csmith/dynamic-safe/coverage/' + token
+        os.environ['GCOV_PREFIX'] = '/home/osboxes/csmith/dynamic-safe/coverage/' + token
 
         cmd = compiler + ' -I$CSMITH_HOME/runtime ' + program + ' -o a.out'
         cmd += ' > ' + token + '_out 2> ' + token + '_err'

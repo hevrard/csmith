@@ -2,9 +2,12 @@ Dynamicly Safe Csmith
 
 Notes on using UBSan to relax the safety of math construct in Csmith.
 
-author: Hugues Evrard
+author: Hugues Evrard, Updates: M. Marcozzi
 
 # Building GCC with coverage
+
+Install required packages using "sudo apt-get install libmpc-dev"
+Download gcc-7.2 source and unzip in ../gcc-7.2.0
 
 Call configure with `--enable-coverage`:
 
@@ -50,6 +53,11 @@ Add following to bashrc:
 
 # build LLVM with coverage
 
+Install required package using "sudo apt install cmake" and "sudo apt install ninja-build"
+Download llvm-5.0.0 source and unzip in ../llvm-5.0.0.src
+Download clang source and unzip in ../llvm-5.0.0.src/tools/clang
+Create a build folder and call cmake from there
+
 We consider we build LLVM using gcc. Pass the "--coverage" flag as an
 extra C and C++ flag:
 
@@ -62,17 +70,46 @@ extra C and C++ flag:
           -DLLVM_BUILD_DOCS="OFF" \
           -DCMAKE_C_FLAGS="--coverage" \
           -DCMAKE_CXX_FLAGS="--coverage" \
-          /home/gpu/work/llvm-5.0.0.src
+          ../llvm-5.0.0.src
 
-Then build, install, and edit bashrc / ldconf in a similar way as with
+Then build (using the "ninja" command), install (using the "sudo ninja install" command), and edit bashrc / ldconf  in a similar way as with
 GCC.
 
-# Getting coverage data
+Add "/usr/local/llvm-5.0/lib" to ldconf. 
 
-The `unsafe-math.py` take care of setting the `GCOV_PREFIX`
+Add to bashrc:
+
+    LLVM_500_PATH="/usr/local/llvm-5.0/"
+
+    PATH="$LLVM_500_PATH/bin:$PATH"
+    export PATH
+
+    LD_LIBRARY_PATH="$LLVM_500_PATH/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH
+
+# Installing CSmith
+
+- Get m4: "sudo apt-get install m4"
+- Install CSmith:
+cd [csmith-root]
+./configure
+make
+sudo make install
+Add to bashrc:
+CSMITH_HOME="..." (containing runtime/csmith.h)
+export CSMITH_HOME
+
+# Running the tool
+
+- Update the value set for GCOV_PREFIX in dynamic-safe.py (compileAndRun) with the right folder for your machine (do not forget the / at the end) 
+- To get ready for having full coverage data, adapt folders in prepare_gcov.sh and generate_gcov.sh, and run prepare_gcov.sh.
+- Run driver.sh for program generation (number of programs to generate and seeds can be changed in the script), no undefined behaviour guards removal, compilation with different optim levels of gcc/clang and comparison of run outputs.
+- To get full coverage data, run generate_gcov.sh, followed by stat_all.sh.
+
+
+The `dynamic-safe.py` called by driver.sh take care of setting the `GCOV_PREFIX`
 environment variables to generate the coverage data files `.gcda` in
-local directories. To actually get the `.gcov` files, use the
-`runGcov.sh` scripts under the build scripts.
+local directories. 
 
 # Some results:
 

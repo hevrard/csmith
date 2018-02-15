@@ -9,6 +9,7 @@ do
 	tmp_dyn=_${dir}_dyn
 	tmp_sta=_${dir}_sta
 	rm -f ${tmp_dyn} ${tmp_sta}
+        echo ${dir}-dynamic_safe
 	for dyn in `find ${dir}-dynamic_safe -name '*.gcov'`
 	do
 	    sta=`echo $dyn | sed -e 's+-dynamic_safe/+-static_safe/+'`

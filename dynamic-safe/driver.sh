@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for seed in `seq 4000 5999`
+for seed in `seq 4000 4010`
 do
     echo "======== START $seed DATE `date`"
     num=`printf "%4.4d" $seed`

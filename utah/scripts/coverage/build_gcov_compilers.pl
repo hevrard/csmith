@@ -19,7 +19,7 @@ my $COV_BASE_HOME = $ENV{"COV_BASE_HOME"};
 
 # for my convenience
 if (!defined($COV_BASE_HOME)) {
-    $COV_BASE_HOME = "/uusoc/exports/scratch/chenyang/tmp/branch_test";
+    $COV_BASE_HOME = "/home/osboxes/csmith/dynamic-safe/coverage";
 }
 
 my $COMPILER_SOURCES_HOME = "$COV_BASE_HOME/sources";
@@ -58,10 +58,10 @@ my %dependencies = (
 );
 
 my %programs = (
-    "gmp" => "ftp://ftp.gmplib.org/pub/gmp-5.0.1/gmp-5.0.1.tar.bz2",
-    "mpfr" => "http://www.mpfr.org/mpfr-current/mpfr-3.0.0.tar.gz",
-    "mpc" => "http://www.multiprecision.org/mpc/download/mpc-0.8.2.tar.gz",
-    "libelf" => "http://www.mr511.de/software/libelf-0.8.13.tar.gz",
+  #  "gmp" => "ftp://ftp.gmplib.org/pub/gmp-5.0.1/gmp-5.0.1.tar.bz2",
+  #  "mpfr" => "http://www.mpfr.org/mpfr-current/mpfr-3.0.0.tar.gz",
+  #  "mpc" => "http://www.multiprecision.org/mpc/download/mpc-0.8.2.tar.gz",
+  #  "libelf" => "http://www.mr511.de/software/libelf-0.8.13.tar.gz",
 );
 
 my $enable_optimized = "";
